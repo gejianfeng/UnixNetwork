@@ -3,7 +3,7 @@
 #ifdef _WIN32
 
 #include <WinSock2.h>
-#include <Ws2tcpip.h>
+#include <WS2tcpip.h>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 {
 	if (argc != 2)
 	{
-		std::cerr << "Usage: DayTimeClient_ipv4.exe <ip-address>" << std::endl;
+		std::cerr << "usage: DayTimeClient_ipv6.exe <ip-address>" << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -28,9 +28,9 @@ int main(int argc, char* argv[])
 
 	int SocketHandler, n;
 	char Buffer[MAX_SIZE + 1];
-	struct sockaddr_in ServAddr;
+	struct sockaddr_in6 ServAddr;
 
-	SocketHandler = socket(AF_INET, SOCK_STREAM, 0);
+	SocketHandler = socket(AF_INET6, SOCK_STREAM, 0);
 	if (SocketHandler < 0)
 	{
 		std::cerr << "socket error" << std::endl;
@@ -39,16 +39,16 @@ int main(int argc, char* argv[])
 	memset(Buffer, 0, sizeof(Buffer));
 	memset(&ServAddr, 0, sizeof(ServAddr));
 
-	ServAddr.sin_family = AF_INET;
-	ServAddr.sin_port = htons(2017);
-
-	if (inet_pton(AF_INET, argv[1], &ServAddr.sin_addr) <= 0)
+	ServAddr.sin6_family = AF_INET6;
+	ServAddr.sin6_port = htons(2017);
+	
+	if (inet_pton(AF_INET6, argv[1], &ServAddr.sin6_addr) <= 0)
 	{
 		std::cerr << "inet_pton error for " << argv[1] << std::endl;
 		return EXIT_FAILURE;
 	}
 
-	if (connect(SocketHandler, (SOCKADDR*)&ServAddr, sizeof(ServAddr)) < 0)
+	if (connect(SocketHandler, (SOCKADDR*)&ServAddr, sizeof(ServAddr)))
 	{
 		std::cerr << "connect error" << std::endl;
 	}
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 
 	if (n < 0)
 	{
-		std::cerr << "read error" << std::endl;
+		std::cerr << "recv error" << std::endl;
 	}
 
 	if (SocketHandler >= 0)

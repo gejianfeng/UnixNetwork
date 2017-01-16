@@ -18,16 +18,16 @@
 int main(int argc, char* argv[])
 {
 #ifdef _WIN32
-	WSAData SocketData;
+	WSADATA SocketData;
 	WSAStartup(MAKEWORD(2, 2), &SocketData);
 #endif
 
 	int SocketHandler, ConnectHandler;
-	struct sockaddr_in ServAddr;
+	struct sockaddr_in6 ServAddr;
 	char Buffer[MAX_SIZE + 1];
 	time_t Ticks;
 
-	SocketHandler = socket(AF_INET, SOCK_STREAM, 0);
+	SocketHandler = socket(AF_INET6, SOCK_STREAM, 0);
 	if (SocketHandler < 0)
 	{
 		std::cerr << "socket error" << std::endl;
@@ -36,16 +36,16 @@ int main(int argc, char* argv[])
 	memset(Buffer, 0, sizeof(Buffer));
 	memset(&ServAddr, 0, sizeof(ServAddr));
 
-	ServAddr.sin_family = AF_INET;
-	ServAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	ServAddr.sin_port = htons(2017);
+	ServAddr.sin6_family = AF_INET6;
+	ServAddr.sin6_port = htons(2017);
+	ServAddr.sin6_addr = in6addr_any;
 
 	if (bind(SocketHandler, (SOCKADDR*)&ServAddr, sizeof(ServAddr)) < 0)
 	{
 		std::cerr << "bind error" << std::endl;
 	}
 
-	if (listen(SocketHandler, MAX_CONNECT_NUM) < 0)
+	if (listen(SocketHandler, MAX_CONNECT_NUM))
 	{
 		std::cerr << "listen error" << std::endl;
 	}
