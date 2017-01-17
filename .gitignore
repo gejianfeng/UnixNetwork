@@ -1,0 +1,5 @@
+*.db
+chapter01/server/DayTimeServer_ipv6/Platform/win32/Debug/
+chapter01/server/DayTimeServer_ipv4/Platform/win32/Debug/
+chapter01/client/DayTimeClient_ipv6/Platform/win32/Debug/
+chapter01/client/DayTimeClient_ipv4/Platform/win32/Debug/
