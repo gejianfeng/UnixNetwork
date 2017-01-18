@@ -5,3 +5,5 @@ chapter01/client/daytimeclient_v1_ipv4/platform/win32/Debug/
 chapter01/server/daytimeserver_v1_ipv6/platform/DayTimeServer_v1_ipv6/Debug/
 chapter01/server/daytimeserver_v1_ipv6/platform/win32/Debug/
 chapter03/client/addressconvert/platform/win32/Debug/
+chapter04/server/daytimeserver_v2_ipv4/platform/win32/Debug/
+chapter04/server/daytimeserver_v2_ipv6/platform/win32/Debug/
