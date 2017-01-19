@@ -11,6 +11,7 @@
 
 #endif
 
+#define MAX_SIZE				255
 #define MAX_CONNECT_NUM			16
 
 int main(int argc, char* argv[])
@@ -22,6 +23,7 @@ int main(int argc, char* argv[])
 
 	int SocketHandler, ClientHandler;
 	struct sockaddr_in ServAddr, ClientAddr;
+	char Buffer[MAX_SIZE + 1];
 	int AddrLen = sizeof(ClientAddr);
 
 	SocketHandler = socket(AF_INET, SOCK_STREAM, 0);
@@ -31,6 +33,7 @@ int main(int argc, char* argv[])
 	}
 
 	memset(&ServAddr, 0, sizeof(ServAddr));
+	memset(&ClientAddr, 0, sizeof(ClientAddr));
 
 	ServAddr.sin_family = AF_INET;
 	ServAddr.sin_port = htons(60000);
@@ -46,15 +49,38 @@ int main(int argc, char* argv[])
 		std::cerr << "listen error." << std::endl;
 	}
 
-	for(;;)
+	for (;;)
 	{
 		ClientHandler = accept(SocketHandler, (sockaddr*)&ClientAddr, &AddrLen);
-		close(ClientHandler);
-	}
 
-	if (SocketHandler >= 0)
-	{
-		close(SocketHandler);
+		if (inet_ntop(AF_INET, &ClientAddr.sin_addr, Buffer, sizeof(Buffer)))
+		{
+			std::cout << "client address: " << Buffer << " , port: " << ntohs(ClientAddr.sin_port) << std::endl;
+		}
+		else
+		{
+			std::cerr << "inet_ntop error." << std::endl;
+		}
+
+		memset(&ClientAddr, 0, sizeof(ClientAddr));
+
+		if (getpeername(ClientHandler, (sockaddr*)&ClientAddr, &AddrLen) < 0)
+		{
+			std::cerr << "getpeername error." << std::endl;
+		}
+		else
+		{
+			if (inet_ntop(AF_INET, &ClientAddr.sin_addr, Buffer, sizeof(Buffer)))
+			{
+				std::cout << "getpeername address: " << Buffer << " , port: " << ntohs(ClientAddr.sin_port) << std::endl;
+			}
+			else
+			{
+				std::cerr << "inet_ntop error." << std::endl;
+			}
+		}
+
+		close(ClientHandler);
 	}
 
 #ifdef _WIN32

@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6B58853B-0BFC-464C-9A39-128D7F790127}</ProjectGuid>
-    <RootNamespace>GetSockNameServer_ipv6</RootNamespace>
+    <ProjectGuid>{80B85FB4-E79E-4F66-9D63-2B647D62E3BC}</ProjectGuid>
+    <RootNamespace>GetPeerNameServer_ipv6</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -110,7 +110,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\getsocknameserver_ipv6.cpp" />
+    <ClCompile Include="..\..\source\getpeernameserver_ipv6.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

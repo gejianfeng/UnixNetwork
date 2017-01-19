@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\getsocknameserver_ipv4.cpp">
+    <ClCompile Include="..\..\source\getpeernameserver_ipv6.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
