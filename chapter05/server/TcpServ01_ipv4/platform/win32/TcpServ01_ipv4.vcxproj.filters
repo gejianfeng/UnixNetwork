@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\TcpServ01_ipv4.cpp">
+    <ClCompile Include="..\..\source\tcpserv01_ipv4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
