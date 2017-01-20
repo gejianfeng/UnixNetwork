@@ -13,3 +13,5 @@ chapter04/client/getsocknameclient_ipv6/platform/win32/Debug/
 chapter04/server/getsocknameserver_ipv6/platform/win32/Debug/
 chapter04/server/getpeernameserver_ipv6/platform/win32/Debug/
 chapter04/server/getpeernameserver_ipv4/platform/win32/Debug/
+chapter05/client/TcpClient01_ipv4/platform/win32/Debug/
+chapter05/server/TcpServ01_ipv4/platform/win32/Debug/
