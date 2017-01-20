@@ -11,7 +11,7 @@
 
 #endif
 
-#define MAX_SIZE				255
+#define MAX_BUFFER_SIZE			255
 
 int main(int argc, char* argv[])
 {
@@ -28,14 +28,15 @@ int main(int argc, char* argv[])
 
 	int SocketHandler;
 	struct sockaddr_in ServAddr;
-	char RecvMsg[MAX_SIZE + 1];
-	char SendMsg[MAX_SIZE + 1];
-	int n;
+	char RecvMsg[MAX_BUFFER_SIZE + 1];
+	char SendMsg[MAX_BUFFER_SIZE + 1];
+	int n = 0;
 
 	SocketHandler = socket(AF_INET, SOCK_STREAM, 0);
 	if (SocketHandler < 0)
 	{
 		std::cerr << "socket error." << std::endl;
+		return EXIT_FAILURE;
 	}
 
 	memset(&ServAddr, 0, sizeof(ServAddr));
@@ -44,10 +45,10 @@ int main(int argc, char* argv[])
 
 	ServAddr.sin_family = AF_INET;
 	ServAddr.sin_port = htons(60000);
-	
+
 	if (inet_pton(AF_INET, argv[1], &ServAddr.sin_addr) <= 0)
 	{
-		std::cerr << "inet_pton error for " << argv[1] << "." << std::endl;
+		std::cerr << "inet_pton error." << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -57,20 +58,16 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	while (std::cin.getline(SendMsg, MAX_SIZE))
+	while (std::cin.getline(SendMsg, sizeof(SendMsg)))
 	{
-		if (strcmp(SendMsg, "exit") == 0)
-		{
-			if (SocketHandler >= 0)
-			{
-				close(SocketHandler);
-				break;
-			}
-		}
-
 		send(SocketHandler, SendMsg, strlen(SendMsg), 0);
 
-		if ((n = recv(SocketHandler, RecvMsg, sizeof(RecvMsg), 0)) > 0)
+		if (strcmp(SendMsg, "exit") == 0)
+		{
+			break;
+		}
+
+		while ((n = recv(SocketHandler, RecvMsg, sizeof(RecvMsg), 0)) > 0)
 		{
 			RecvMsg[n] = '\0';
 
@@ -82,12 +79,19 @@ int main(int argc, char* argv[])
 			{
 				std::cout << std::endl;
 			}
+
+			break;
 		}
 
 		if (n < 0)
 		{
 			std::cerr << "recv error." << std::endl;
 		}
+	}
+
+	if (SocketHandler >= 0)
+	{
+		close(SocketHandler);
 	}
 
 #ifdef _WIN32
