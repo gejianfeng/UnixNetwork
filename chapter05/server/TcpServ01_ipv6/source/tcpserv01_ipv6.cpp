@@ -22,9 +22,9 @@ int main(int argc, char* argv[])
 #endif
 
 	int SocketHandler, ClientHandler;
-	struct sockaddr_in ServAddr;
+	struct sockaddr_in6 ServAddr;
 
-	SocketHandler = socket(AF_INET, SOCK_STREAM, 0);
+	SocketHandler = socket(AF_INET6, SOCK_STREAM, 0);
 	if (SocketHandler < 0)
 	{
 		std::cerr << "socket error." << std::endl;
@@ -33,9 +33,9 @@ int main(int argc, char* argv[])
 
 	memset(&ServAddr, 0, sizeof(ServAddr));
 
-	ServAddr.sin_family = AF_INET;
-	ServAddr.sin_port = htons(60000);
-	ServAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	ServAddr.sin6_family = AF_INET6;
+	ServAddr.sin6_port = htons(60000);
+	ServAddr.sin6_addr = in6addr_any;
 
 	if (bind(SocketHandler, (sockaddr*)&ServAddr, sizeof(ServAddr)) < 0)
 	{
@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
 
 		struct sockaddr_storage Addr;
 		int AddrLen = sizeof(Addr);
+
 		if (getpeername(ClientHandler, (sockaddr*)&Addr, &AddrLen) < 0)
 		{
 			std::cerr << "getpeername error." << std::endl;
@@ -62,10 +63,9 @@ int main(int argc, char* argv[])
 			continue;
 		}
 
-		char Buffer[MAX_CONNECT_NUM + 1];
-
 		char IpAddress[MAX_BUFFER_SIZE + 1];
 		char Port[MAX_BUFFER_SIZE + 1];
+		char Buffer[MAX_BUFFER_SIZE + 1];
 
 		int n = 0;
 
@@ -77,31 +77,31 @@ int main(int argc, char* argv[])
 		{
 		case AF_INET:
 		{
-			struct sockaddr_in ClientAddr = *((sockaddr_in*)&Addr);
+			struct sockaddr_in ServAddr = *((sockaddr_in*)&Addr);
 
-			if (inet_ntop(Addr.ss_family, &ClientAddr.sin_addr, IpAddress, sizeof(IpAddress)) <= 0)
+			if (inet_ntop(Addr.ss_family, &ServAddr.sin_addr, IpAddress, sizeof(IpAddress)) <= 0)
 			{
 				std::cerr << "inet_ntop error." << std::endl;
 				close(ClientHandler);
 				continue;
 			}
 
-			snprintf(Port, sizeof(Port), "%d", ntohs(ClientAddr.sin_port));
+			snprintf(Port, sizeof(Port), "%d", ntohs(ServAddr.sin_port));
 
 			break;
 		}
 		case AF_INET6:
 		{
-			struct sockaddr_in6 ClientAddr = *((sockaddr_in6*)&Addr);
-
-			if (inet_ntop(Addr.ss_family, &ClientAddr.sin6_addr, IpAddress, sizeof(IpAddress)) <= 0)
+			struct sockaddr_in6 ServAddr = *((sockaddr_in6*)&Addr);
+			
+			if (inet_ntop(Addr.ss_family, &ServAddr.sin6_addr, IpAddress, sizeof(IpAddress)) <= 0)
 			{
 				std::cerr << "inet_ntop error." << std::endl;
 				close(ClientHandler);
 				continue;
 			}
 
-			snprintf(Port, sizeof(Port), "%d", ntohs(ClientAddr.sin6_port));
+			snprintf(Port, sizeof(Port), "%d", ntohs(ServAddr.sin6_port));
 
 			break;
 		}
@@ -110,7 +110,6 @@ int main(int argc, char* argv[])
 			std::cerr << "not ipv4 or ipv6 connection." << std::endl;
 			close(ClientHandler);
 			continue;
-
 			break;
 		}
 		}
@@ -152,6 +151,6 @@ int main(int argc, char* argv[])
 #ifdef _WIN32
 	WSACleanup();
 #endif
-	
+
 	return EXIT_SUCCESS;
 }

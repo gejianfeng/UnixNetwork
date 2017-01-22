@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 {
 	if (argc != 2)
 	{
-		std::cerr << "usage: TcpClient01_ipv4.exe <ip-address>" << std::endl;
+		std::cerr << "usage: TcpClient01_ipv6.exe <ip-address>" << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -27,12 +27,12 @@ int main(int argc, char* argv[])
 #endif
 
 	int SocketHandler;
-	struct sockaddr_in ServAddr;
+	struct sockaddr_in6 ServAddr;
 	char RecvMsg[MAX_BUFFER_SIZE + 1];
 	char SendMsg[MAX_BUFFER_SIZE + 1];
 	int n = 0;
 
-	SocketHandler = socket(AF_INET, SOCK_STREAM, 0);
+	SocketHandler = socket(AF_INET6, SOCK_STREAM, 0);
 	if (SocketHandler < 0)
 	{
 		std::cerr << "socket error." << std::endl;
@@ -43,10 +43,10 @@ int main(int argc, char* argv[])
 	memset(RecvMsg, 0, sizeof(RecvMsg));
 	memset(SendMsg, 0, sizeof(SendMsg));
 
-	ServAddr.sin_family = AF_INET;
-	ServAddr.sin_port = htons(60000);
+	ServAddr.sin6_family = AF_INET6;
+	ServAddr.sin6_port = htons(60000);
 
-	if (inet_pton(AF_INET, argv[1], &ServAddr.sin_addr) <= 0)
+	if (inet_pton(AF_INET6, argv[1], &ServAddr.sin6_addr) <= 0)
 	{
 		std::cerr << "inet_pton error for " << argv[1] << "." << std::endl;
 		return EXIT_FAILURE;
