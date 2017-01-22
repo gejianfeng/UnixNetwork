@@ -17,3 +17,5 @@ chapter05/client/TcpClient01_ipv4/platform/win32/Debug/
 chapter05/server/TcpServ01_ipv4/platform/win32/Debug/
 chapter05/server/TcpServ01_ipv6/platform/win32/Debug/
 chapter05/client/TcpClient01_ipv6/platform/win32/Debug/
+chapter05/client/TcpSumClient_ipv4/platform/win32/Debug/
+chapter05/server/TcpSumServ_ipv4/platform/win32/Debug/
